@@ -1,34 +1,50 @@
 var L= (function()
 {
+    var isDebugMode = false;
     var i = 0,
-    log = function() {
-    console.log('Счетчик: ' +(++i));};
-            var publicAPI =  {
+        log = function () {
+        i++;
+        if(publicAPI.isDebugMode) {
+            console.log('Функция: ' + this.name + ' Счетчик: ' + i);
+            }
 
-            name:"Библиотека L.js",
-            CL: function(str)
+        };
+
+    var publicAPI =  {
+
+            name:'Библиотека L.js',
+
+            version: '2.0.0',
+
+
+            CL: function CL(str)
             {
                 console.log(str);
-                log();
+                log.call(CL);
                 return str;
 
             },
-            CGb: function(str)
+            CGb: function CGb(str)
             {
                 console.group(str);
-                log();
+                log.call(CGb);
 
             },
-            CGe: function()
+            CGe: function CGe()
             {
                 console.groupEnd();
-                log();
+                log.call(CGe);
 
             },
-            n: function (){return'Библиотека publicAPI.js';}
+
+        n: function (){return'Библиотека publicAPI.js';},
+        k: () => {return '3.0.0'}
+
+
         }
 
     publicAPI.__defineGetter__('name', publicAPI.n);
+    publicAPI.__defineGetter__('version', publicAPI.k);
     publicAPI.__defineSetter__('name',
         function (newName) {
             publicAPI.CL('Доступ запрещен');
@@ -41,8 +57,62 @@ var L= (function()
             return  newName;
 
         });
+    publicAPI.__defineSetter__('version', function (newVersion) {publicAPI.CL('Доступ запрещен');});
     publicAPI.__defineSetter__('version', publicAPI.__lookupSetter__('name'));
-    return publicAPI;
+    publicAPI.__defineSetter__('version', publicAPI.__lookupSetter__('version'));
+
+    //Определение свойств материнского объекта
+    Object.defineProperty(publicAPI, 'name',
+        {
+            //value: 'библиотека L.js',
+            //writable: false,
+            configurable: false,
+            enumerable: false,
+            set: publicAPI.__lookupSetter__('name'),
+            get: publicAPI.__lookupGetter__('name')
+        });
+    Object.defineProperty(publicAPI, 'version',
+        {
+            //value: 'библиотека L.js',
+            //writable: false,
+            configurable: false,
+            enumerable: false,
+            set: publicAPI.__lookupSetter__('version'),
+            get: publicAPI.__lookupGetter__('version')
+
+        });
+    Object.defineProperty(publicAPI, 'isDebugMode',
+        {
+            configurable: false,
+            set: function (val) {
+                isDebugMode = val;
+            },
+            get: function () {
+                return isDebugMode;
+            }
+        })
+    //Создание дочернего объекта
+    var publicAPIChild = Object.create(publicAPI, {
+        //Добавление новых свойств или методов
+        date: {
+            value: '17.10.2020',
+            writable: false,
+            configurable: false,
+            enumerable: true
+        },
+        author: {
+            value: 'М3О-235Б-19',
+            writable: false,
+            configurable: false,
+            enumerable: true
+        }
+
+
+        });
+
+
+
+    return publicAPIChild;
 }) ();
 /*IIFE-Immediate invoke function expression
  (f(){})(); - Краткая запись
