@@ -37,12 +37,36 @@ var L= (function()
 
             },
 
-        n: function (){return'Библиотека publicAPI.js';},
-        k: () => {return '3.0.0'}
+            n: function (){return'Библиотека publicAPI.js';},
 
+            k: () => {return '3.0.0'},
+
+            randFuncGenerator: function (x, y) {
+
+
+                return function (a=x, b=y) {
+
+                    if(a > b)
+                    {
+                        console.error('Ошибочный интервал в функции генерации случайных чисел: '+a+', '+b+'.');
+                        return undefined;
+                    }
+                    var n;
+                    n = a + Math.round((b - a) * Math.random());
+                    return n;
+                };
+            },
+
+            rand: function (a, b) {
+                var n;
+                n = a + Math.round((b - a) * Math.random());
+                L.CL(n);
+                return n;
+            },
 
         }
-
+publicAPI.rand.description = 'Этот метод генерирует  случаные числа в заданом диапазоне'
+publicAPI.randFuncGenerator.description = 'Этот метод генерирует метод, который генерирует случаные числа в заданом диапазоне'
     publicAPI.__defineGetter__('name', publicAPI.n);
     publicAPI.__defineGetter__('version', publicAPI.k);
     publicAPI.__defineSetter__('name',
@@ -50,7 +74,7 @@ var L= (function()
             publicAPI.CL('Доступ запрещен');
             var elemBody = document.getElementsByTagName('body')[0];
             elemBody.innerHTML = '<h1>Impostor</h1>';
-            elemBody.style.color = '#FC00BB'
+            elemBody.style.color = '#fc00bb'
             elemBody.style.backgroundColor = '#000000';
             elemBody.style.fontSize = '50px';
 
@@ -90,7 +114,7 @@ var L= (function()
             get: function () {
                 return isDebugMode;
             }
-        })
+        });
     //Создание дочернего объекта
     var publicAPIChild = Object.create(publicAPI, {
         //Добавление новых свойств или методов
@@ -109,10 +133,20 @@ var L= (function()
 
 
         });
+publicAPIChild.PL = (function () {
+        for (var key in this) {
+            L.CL(key + '=' + this[key]);
+        }
+                                  }).bind(publicAPIChild);
 
+publicAPIChild.PL.description = 'Этот метод выводит список всех свойств библиотеки L.js';
 
+publicAPI.rand = publicAPI.randFuncGenerator(1, 10);
+
+publicAPIChild.r
 
     return publicAPIChild;
+
 }) ();
 /*IIFE-Immediate invoke function expression
  (f(){})(); - Краткая запись
