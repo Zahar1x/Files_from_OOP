@@ -64,7 +64,10 @@ var L= (function()
                 return n;
             },
 
+            t:  (x) => typeof(x),
+
         }
+        publicAPI.t.descripton = 'Этот метод возвращает тип принимаемого значения'
 publicAPI.rand.description = 'Этот метод генерирует  случаные числа в заданом диапазоне'
 publicAPI.randFuncGenerator.description = 'Этот метод генерирует метод, который генерирует случаные числа в заданом диапазоне'
     publicAPI.__defineGetter__('name', publicAPI.n);
@@ -137,17 +140,70 @@ publicAPIChild.PL = (function () {
         for (var key in this) {
             L.CL(key + '=' + this[key]);
         }
-                                  }).bind(publicAPIChild);
+}).bind(publicAPIChild);
 
 publicAPIChild.PL.description = 'Этот метод выводит список всех свойств библиотеки L.js';
 
 publicAPI.rand = publicAPI.randFuncGenerator(1, 10);
 
-publicAPIChild.r
+var __str = {
+    valueOf: function () {
+    var index = publicAPIChild.rand(0, (this.valueList.length - 1));
+    return this.valueList[index];
+},
+    chance: function (){
+        var ch = 0;
+        ch = 1/(this.valueList.length);
+        return ch;
+    }
+};
+function STR(x) {
+    this.valueList = x;
+}
+STR.prototype = __str;
+__str.constructor = STR;
 
+publicAPIChild.STR = STR;
+
+var __phrase = {
+    valueOf: function () {
+        var result = '';
+        for(var i=0; i < this.wordList.length; i++)
+        {
+            result += this.wordList[i].valueOf();
+        }
+        return result;
+    },
+    chance: function () {
+        var ch = 1;
+        var i=0;
+        while(i<this.wordList.length - 1)
+        {
+            ch *= (1/this.wordList[i].valueList.length);
+            i += 2;
+        }
+        return ch;
+    }
+};
+function Phrase(...x) {                 //Если мы хотим передавать динамическое кол-во параметров, то ставим троеточие перед явным параметром.
+                                        // Теперь все что мы будем передавать в виде параметров будет записываться в единый массив х
+    this.wordList = x.map((v)=>{var str = new STR(v); return str;});
+}
+Phrase.prototype =__phrase;
+__phrase.constructor = Phrase;
+
+publicAPIChild.Phrase = Phrase;
+
+publicAPIChild.bodyView = function (txt) {
+    var elemBody = document.getElementsByTagName('body')[0];
+    elemBody.innerHTML = `<h1>${txt}</h1>`;
+    elemBody.style.color = '#ffffff'
+    elemBody.style.backgroundColor = '#000000';
+    elemBody.style.fontSize = '50px';
+}
     return publicAPIChild;
 
-}) ();
+})();
 /*IIFE-Immediate invoke function expression
  (f(){})(); - Краткая запись
 Паттерн модуль - возвращаем объект, в котором несколько функций
