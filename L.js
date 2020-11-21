@@ -176,11 +176,11 @@ var __phrase = {
     },
     chance: function () {
         var ch = 1;
-        var i=0;
-        while(i<this.wordList.length - 1)
+        var i = 0;
+        while(i<this.wordList.length)
         {
             ch *= (1/this.wordList[i].valueList.length);
-            i += 2;
+            i++;
         }
         return ch;
     }
@@ -194,13 +194,17 @@ __phrase.constructor = Phrase;
 
 publicAPIChild.Phrase = Phrase;
 
-publicAPIChild.bodyView = function (txt) {
+publicAPIChild.bodyView = function (txt, isClear = false) {
     var elemBody = document.getElementsByTagName('body')[0];
-    elemBody.innerHTML = `<h1>${txt}</h1>`;
+    if(isClear){elemBody.innerHTML = ' ';}
+    elemBody.innerHTML += txt;
     elemBody.style.color = '#ffffff'
     elemBody.style.backgroundColor = '#000000';
-    elemBody.style.fontSize = '50px';
+    elemBody.style.fontSize = '25px';
+    elemBody.style.flex;
 }
+
+
     return publicAPIChild;
 
 })();
