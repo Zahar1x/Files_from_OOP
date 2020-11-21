@@ -204,6 +204,19 @@ publicAPIChild.bodyView = function (txt, isClear = false) {
     elemBody.style.flex;
 }
 
+var propertyName = Symbol(`Название переменной
+для хранения знначения счетчика`);
+
+publicAPIChild.Counter = function Counter() {
+    this[propertyName] = 0;
+    this.__proto__[propertyName] = 0;
+    };
+
+publicAPIChild.Counter.prototype.next = function next() {
+    this[propertyName]++;
+    this.__proto__[propertyName]++;
+    return this[propertyName];
+    }
 
     return publicAPIChild;
 
