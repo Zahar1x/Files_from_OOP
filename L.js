@@ -16,12 +16,27 @@ var L= (function()
 
             version: '2.0.0',
 
-
-            CL: function CL(str)
+/*
+            CL: function CL(str, ...a)
             {
                 console.log(str);
+                for (var i=0;i <a.length - 1; i++)
+                {
+                  console.log(a[i]);
+                };
                 log.call(CL);
                 return str;
+            },
+ */
+            CL: function CL(...str)
+            {
+                 console.log(...str);
+                log.call(CL);
+                 //return str.join();
+                 //return str.toString();
+                 //return JSON.stringify(str);
+                 //return str.reduce(function(total, val){if(total){total += " ";} return total + val;}, "")
+                 return str.reduce(function(total, val){return total + (total ? " " : "") + val;}, "")
 
             },
             CGb: function CGb(str)
@@ -65,6 +80,32 @@ var L= (function()
             },
 
             t:  (x) => typeof(x),
+            mes: function mes(thisObj, caller, text, style) {
+                var styleP='';
+                var styleSpan = '';
+                styleSpan = "style = 'font-weight: bold; color:" + thisObj.color +";'";
+                var callerName = caller.name;
+                var thisObjName = thisObj.name;
+                if(callerName == thisObjName){
+                    callerName = 'Я';
+                    text= text.replace('меня', 'себя');
+                }
+                if(style)
+                {
+                    styleP = " style ='" + style +";'";
+                }
+                this.bodyView('<p ' + styleP +'><span' + styleSpan +'>' + thisObjName.toUpperCase() + ':</span> ' +
+                    callerName+ ' ' + text +'.</p>');
+            },
+        bodyView: function bodyView(txt, isClear = false) {
+            var elemBody = document.getElementsByTagName('body')[0];
+            if(isClear){elemBody.innerHTML = ' ';}
+            elemBody.innerHTML += txt;
+            elemBody.style.color = '#ffffff'
+            elemBody.style.backgroundColor = '#000000';
+            elemBody.style.fontSize = '25px';
+            elemBody.style.flex;
+        }
 
         }
         publicAPI.t.descripton = 'Этот метод возвращает тип принимаемого значения'
@@ -194,15 +235,7 @@ __phrase.constructor = Phrase;
 
 publicAPIChild.Phrase = Phrase;
 
-publicAPIChild.bodyView = function (txt, isClear = false) {
-    var elemBody = document.getElementsByTagName('body')[0];
-    if(isClear){elemBody.innerHTML = ' ';}
-    elemBody.innerHTML += txt;
-    elemBody.style.color = '#ffffff'
-    elemBody.style.backgroundColor = '#000000';
-    elemBody.style.fontSize = '25px';
-    elemBody.style.flex;
-}
+
 
 var propertyName = Symbol(`Название переменной
 для хранения знначения счетчика`);
